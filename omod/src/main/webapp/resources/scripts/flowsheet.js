@@ -464,7 +464,7 @@
      * Loads the htmlform for a given encounter, calling the function passed in as 'action' with the htmlform results
      */
     var loadHtmlFormForEncounter = function(formName, encounterId, editMode, action) {
-        jq.get(emr.pageLink('pihmalawi', 'htmlForm', {
+        jq.get(emr.pageLink('htmlformentryui', 'htmlform/htmlForm', {
             "patient": patientId,
             "encounter": encounterId,
             "editMode": editMode,
