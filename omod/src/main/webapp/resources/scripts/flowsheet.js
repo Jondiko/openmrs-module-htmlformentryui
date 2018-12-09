@@ -18,7 +18,8 @@
     var heightMap = null;
     var loadingEncounters = [];
 
-    function Flowsheet(formName, encounterIds) {
+    function Flowsheet(index, formName, encounterIds) {
+        this.index = index;
         this.formName = formName;
         this.encounterIds = encounterIds;
 
@@ -52,8 +53,8 @@
         requireEncounter = reqEnc;
     };
 
-    flowsheet.addFlowsheet = function(formName, encounterIds) {
-        flowsheets.push(new Flowsheet(formName, encounterIds));
+    flowsheet.addFlowsheet = function(index, formName, encounterIds) {
+        flowsheets.push(new Flowsheet(index, formName, encounterIds));
     };
 
     flowsheet.getFlowsheet = function(formName) {
@@ -243,7 +244,7 @@
                     for (var i=0; i<flowsheets.length; i++) {
                         var flowsheet = flowsheets[i];
                         if (flowsheet.length == 0) {
-                            jq("#flowsheet-section-"+currentlyEditingFormName).children().remove();
+                            jq("#flowsheet-section-"+flowsheet.index).children().remove();
                         }
                     }
                 }
@@ -269,7 +270,8 @@
     flowsheet.enterVisit = function(formName) {
         flowsheet.setCurrentlyEditingFormName(formName);
         loadHtmlFormForEncounter(formName, null, true, function(data) {
-            jq('#flowsheet-edit-section-'+formName).html(data).show();
+            var fs = flowsheet.getFlowsheet(formName);
+            jq('#flowsheet-edit-section-'+fs.index).html(data).show();
             setupFormCustomizations(jq('#flowsheet-edit-section-'+formName));
             showLinksForEditMode();
             jq("#header-section").hide();
@@ -282,8 +284,9 @@
         flowsheet.setCurrentlyEditingFormName(formName);
         flowsheet.setCurrentlyEditingEncounterId(encId);
         loadHtmlFormForEncounter(formName, encId, true, function(data) {
-            jq('#flowsheet-edit-section-'+formName).html(data).show();
-            setupFormCustomizations(jq('#flowsheet-edit-section-'+formName));
+            var fs = flowsheet.getFlowsheet(formName);
+            jq('#flowsheet-edit-section-'+fs.index).html(data).show();
+            setupFormCustomizations(jq('#flowsheet-edit-section-'+fs.index));
             showLinksForEditMode();
             jq("#header-section").hide();
             jq(".flowsheet-section").hide();
@@ -395,7 +398,8 @@
             var newVisitMoment = extractVisitMoment(newRow);
             var heightField = jq(data).find("#heightEntered :first-child");
             recordHeightInfo(heightField, newVisitMoment, encId, formName);
-            var section = jq("#flowsheet-section-"+formName);
+            var fs = flowsheet.getFlowsheet(formName);
+            var section = jq("#flowsheet-section-"+fs.index);
             var table = section.find(".visit-table");
             var inserted = false;
             if (table && table.length > 0) {

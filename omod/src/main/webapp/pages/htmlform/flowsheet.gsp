@@ -17,8 +17,9 @@
     flowsheet.setDefaultLocationId(${ defaultLocationId });
     flowsheet.setRequireEncounter(${ requireEncounter });
 
+    var flowsheetIndex = 0;
     <% for (String formName : flowsheetEncounters.keySet()) { %>
-        flowsheet.addFlowsheet('${formName}', ${flowsheetEncounters.get(formName)});
+        flowsheet.addFlowsheet(flowsheetIndex++, '${formName}', ${flowsheetEncounters.get(formName)});
     <% } %>
 
     jq(document).ready( function() {
@@ -244,7 +245,8 @@
         <div id="header-section"></div>
     <% } %>
 
-    <% for (String formName : flowsheetEncounters.keySet()) { %>
+    <%  int i=0;
+        for (String formName : flowsheetEncounters.keySet()) { %>
 
         <div class="visit-section">
 
@@ -257,10 +259,11 @@
                 </div>
             <% } %>
 
-            <div id="flowsheet-section-${formName}" class="flowsheet-section"></div>
+            <div id="flowsheet-section-${i}" class="flowsheet-section"></div>
 
-            <div id="flowsheet-edit-section-${formName}" class="flowsheet-edit-section"></div>
+            <div id="flowsheet-edit-section-${i}" class="flowsheet-edit-section"></div>
 
+            <% i++; %>
         </div>
     <% } %>
 
