@@ -24,7 +24,7 @@
         <% if (dashboardUrl.equals("legacyui")) { %>
             flowsheet.setPatientDashboardUrl('/'+OPENMRS_CONTEXT_PATH+'/patientDashboard.form?patientId='+patientIdStr);
         <% } else { %>
-            var dashboardUrl = '${dashboardUrl}'.replace("\\{patientId\\}", patientIdStr).replace("\\{patientUuid\\}", patientUuidStr);
+            var dashboardUrl = '${dashboardUrl}'.replace("\\{\\{patientId\\}\\}", patientIdStr).replace("\\{\\{patientUuid\\}\\}", patientUuidStr);
             flowsheet.setPatientDashboardUrl('/'+OPENMRS_CONTEXT_PATH + '/' + dashboardUrl);
         <% } %>
     <% } else { %>
