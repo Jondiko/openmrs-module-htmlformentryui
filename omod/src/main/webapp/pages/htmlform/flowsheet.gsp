@@ -10,12 +10,26 @@
 
 <script type="text/javascript">
 
+    var patientIdStr = '${ patient.patient.patientId }';
+    var patientUuidStr = '${ patient.patient.uuid }';
+
     flowsheet.setPatientId(${ patient.patient.patientId });
     flowsheet.setHeaderForm('${ headerForm }');
     flowsheet.setHeaderEncounterId(${ headerEncounter == null ? null : headerEncounter.encounterId });
     flowsheet.setHtmlFormJs(htmlForm); // This is the htmlform object added to the page by htmlformentryui htmlform.js
     flowsheet.setDefaultLocationId(${ defaultLocationId });
     flowsheet.setRequireEncounter(${ requireEncounter });
+
+    <% if (dashboardUrl != null && !dashboardUrl.equals("")) { %>
+        <% if (dashboardUrl.equals("legacyui")) { %>
+            flowsheet.setPatientDashboardUrl('/'+OPENMRS_CONTEXT_PATH+'/patientDashboard.form?patientId='+patientIdStr);
+        <% } else { %>
+            var dashboardUrl = '${dashboardUrl}'.replace("\\{patientId\\}", patientIdStr).replace("\\{patientUuid\\}", patientUuidStr);
+            flowsheet.setPatientDashboardUrl('/'+OPENMRS_CONTEXT_PATH + '/' + dashboardUrl);
+        <% } %>
+    <% } else { %>
+        flowsheet.setPatientDashboardUrl('/'+OPENMRS_CONTEXT_PATH+'/coreapps/clinicianfacing/patient.page?patientId='+patientUuidStr)
+    <% } %>
 
     var flowsheetIndex = 0;
     <% for (String formName : flowsheetEncounters.keySet()) { %>

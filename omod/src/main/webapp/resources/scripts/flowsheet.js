@@ -17,6 +17,7 @@
     var dirty = false;
     var heightMap = null;
     var loadingEncounters = [];
+    var patientDashboardUrl = null;
 
     function Flowsheet(index, formName, encounterIds) {
         this.index = index;
@@ -135,9 +136,12 @@
         window.print();
     };
 
+    flowsheet.setPatientDashboardUrl = function(url) {
+        patientDashboardUrl = url;
+    }
+
     flowsheet.backToPatientDashboard = function() {
-        // TODO: Hackathon
-        document.location.href='/'+OPENMRS_CONTEXT_PATH+'/patientDashboard.form?patientId='+patientId;
+        document.location.href=patientDashboardUrl;
     }
 
     flowsheet.showErrorMessage = function(msg) {
@@ -213,7 +217,7 @@
             jq('#header-section').html(data);
             setupFormCustomizations(jq('#header-section'));
             showLinksForEditMode();
-            jq(".flowsheet-section").hide(); // TODO: Change flowsheet.gsp so that it has .flowsheet-section classes on all flowsheets
+            jq(".flowsheet-section").hide();
             flowsheet.focusFirstObs();
         });
     };
@@ -226,8 +230,7 @@
             else {
                 deleteEncounter(headerEncounterId, function(data) {
                     if (data.success) {
-                        // TODO: Hackathon
-                        document.location.href = '/'+OPENMRS_CONTEXT_PATH+'/patientDashboard.form?patientId='+patientId;
+                        flowsheet.backToPatientDashboard();
                     }
                     else {
                         flowsheet.showErrorMessage(data.message);
@@ -297,8 +300,7 @@
     flowsheet.cancelEdit = function() {
         if (currentlyEditingFormName == headerForm) {
             if (headerEncounterId == null) {
-                // TODO: Hackathon
-                document.location.href = '/'+OPENMRS_CONTEXT_PATH+'/patientDashboard.form?patientId='+patientId;
+                flowsheet.backToPatientDashboard();
             }
             else {
                 flowsheet.viewHeader();
@@ -484,7 +486,7 @@
 
     var showLinksForEditMode = function() {
         jq(".form-action-link").hide();
-        if (currentlyEditingEncounterId != null) { // TODO
+        if (currentlyEditingEncounterId != null) {
             jq("#delete-button").show();
         }
         jq("#cancel-button").show();

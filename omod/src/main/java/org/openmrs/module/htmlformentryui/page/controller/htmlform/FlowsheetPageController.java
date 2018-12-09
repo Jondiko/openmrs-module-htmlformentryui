@@ -58,6 +58,7 @@ public class FlowsheetPageController {
                            @RequestParam(value="addRow", required = false) Boolean addRow,
                            @RequestParam(value="requireEncounter", required = false) Boolean requireEncounter,
                            @RequestParam(value="requireObs", required = false) String requireObs,
+                           @RequestParam(value="dashboardUrl", required = false) String dashboardUrl,
                            UiUtils ui, PageModel model,
                            @SpringBean("htmlFormEntryService") HtmlFormEntryService htmlFormEntryService,
                            @SpringBean("formService") FormService formService,
@@ -133,6 +134,7 @@ public class FlowsheetPageController {
             addRow = Boolean.TRUE;
         }
         model.addAttribute("addRow", addRow == Boolean.TRUE);
+        model.addAttribute("dashboardUrl", dashboardUrl);
 
         model.addAttribute("returnUrl", ui.pageLink("htmlformentryui", "flowsheet", SimpleObject.create("patientId", patient.getId(), "headerForm", headerForm, "flowsheets", flowsheets, "viewOnly", viewOnly)));
 	}
