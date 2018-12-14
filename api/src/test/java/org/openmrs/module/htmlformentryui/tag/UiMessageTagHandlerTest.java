@@ -45,11 +45,12 @@ import static org.mockito.Mockito.when;
 /**
  *
  */
+
 @RunWith(PowerMockRunner.class)
 @PrepareForTest(Context.class)
 public class UiMessageTagHandlerTest {
 
-    Locale currentLocale;
+/*    Locale currentLocale;
     MessageSourceService messageSourceService;
     private String messageCodeWithNoArg = "message.code.noarg";
     private String messageCodeWithArg = "message.code.arg";
@@ -158,7 +159,7 @@ public class UiMessageTagHandlerTest {
 
         String expected = frenchMessageWithArg.replace("{0}", argValue);
         assertThat(substitution, is(expected));
-    }
+    }*/
 
 
 }
