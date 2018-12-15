@@ -1,6 +1,7 @@
 <%
     ui.decorateWith("appui", "standardEmrPage")
     ui.includeJavascript("uicommons", "moment.min.js")
+    ui.includeJavascript("uicommons", "emr.js", Integer.MAX_VALUE - 15)
     ui.includeJavascript("htmlformentryui", "flowsheet.js")
     ui.includeJavascript("htmlformentryui", "jstat.min.js")
     ui.includeJavascript("htmlformentryui", "htmlForm.js")
