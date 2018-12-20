@@ -1,10 +1,11 @@
 <%
-    ui.decorateWith("appui", "standardEmrPage")
+    ui.decorateWith("appui", "standardEmrPage", [ patient: currentPatient ])
     ui.includeJavascript("uicommons", "moment.min.js")
-    ui.includeJavascript("uicommons", "emr.js", Integer.MAX_VALUE - 15)
+    ui.includeJavascript("uicommons", "emr.js", 50)
     ui.includeJavascript("htmlformentryui", "flowsheet.js")
     ui.includeJavascript("htmlformentryui", "jstat.min.js")
     ui.includeJavascript("htmlformentryui", "htmlForm.js")
+    ui.includeCss("htmlformentryui", "htmlform/referenceappmini.css")
 
     def addNewRow = (addRow != null && addRow == true) ? true : false;
 %>
@@ -29,7 +30,7 @@
             flowsheet.setPatientDashboardUrl('/'+OPENMRS_CONTEXT_PATH + '/' + dashboardUrl);
         <% } %>
     <% } else { %>
-        flowsheet.setPatientDashboardUrl('/'+OPENMRS_CONTEXT_PATH+'/coreapps/clinicianfacing/patient.page?patientId='+patientUuidStr)
+        flowsheet.setPatientDashboardUrl('/'+OPENMRS_CONTEXT_PATH+'/kenyaemr/clinician/clinicianViewPatient.page?patientId='+patientUuidStr)
     <% } %>
 
     var flowsheetIndex = 0;
