@@ -1,8 +1,9 @@
 <%
-    ui.decorateWith("appui", "standardEmrPage")
+    ui.decorateWith("appui", "standardEmrPage", [ patient: currentPatient ])
 
     ui.includeJavascript("uicommons", "angular.min.js");
     ui.includeJavascript("uicommons", "angular-resource.min.js");
+    ui.includeCss("kenyaemr", "referenceapplication.css", 100)
 
     def breadcrumbMiddle = breadcrumbOverride ?: """
         [ { label: '${ returnLabel }' , link: '${ returnUrl }'} ]
@@ -24,7 +25,6 @@
     });
 </script>
 
-${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient ]) }
 
 ${ ui.includeFragment("htmlformentryui", "htmlform/enterHtmlForm", [
         patient: patient,
