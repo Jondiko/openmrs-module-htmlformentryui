@@ -1,5 +1,15 @@
 <%
-    ui.decorateWith("appui", "standardEmrPage")
+    ui.decorateWith("appui", "standardEmrPage", [ patient: currentPatient ])
+
+    // trying something for simple ui
+
+    ui.includeJavascript("uicommons", "jquery-1.12.4.min.js", Integer.MAX_VALUE)
+    ui.includeJavascript("uicommons", "jquery-ui-1.9.2.custom.min.js", Integer.MAX_VALUE - 10)
+    ui.includeJavascript("uicommons", "underscore-min.js", Integer.MAX_VALUE - 10)
+    ui.includeJavascript("uicommons", "knockout-2.2.1.js", Integer.MAX_VALUE - 15)
+    //ui.includeJavascript("uicommons", "emr.js", Integer.MAX_VALUE - 15)
+
+    //
     ui.includeJavascript("uicommons", "navigator/validators.js", Integer.MAX_VALUE - 19)
     ui.includeJavascript("uicommons", "navigator/navigator.js", Integer.MAX_VALUE - 20)
     ui.includeJavascript("uicommons", "navigator/navigatorHandlers.js", Integer.MAX_VALUE - 21)
@@ -9,6 +19,7 @@
     ui.includeJavascript("uicommons", "angular.min.js");
     ui.includeJavascript("uicommons", "angular-resource.min.js");
     ui.includeJavascript("htmlformentryui", "htmlFormSimple.js", Integer.MIN_VALUE)
+    ui.includeCss("kenyaemr", "referenceapplication.css")
     ui.includeCss("htmlformentryui", "htmlform/htmlFormSimple.css")
     def createNewVisit = createVisit ?: false
 
@@ -19,7 +30,6 @@
 
 ${ ui.includeFragment("uicommons", "validationMessages")}
 
-${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient ]) }
 
 <script type="text/javascript">
 
@@ -57,6 +67,7 @@ ${ ui.includeFragment("coreapps", "patientHeader", [ patient: patient ]) }
     });
 </script>
 
+
 <div id="form-actions-container">
     <a id="save-form">
         <i class="icon-save small"></i>
@@ -82,10 +93,10 @@ ${ ui.includeFragment("htmlformentryui", "htmlform/enterHtmlForm", [
 
 <script type="text/template" id="confirmation-template">
     <div id="confirmation">
-        <span class="title">${ ui.message("coreapps.simpleFormUi.confirm.title") }</span>
+        <span class="title">${ ui.message("htmlformentryui.simpleFormUi.confirm.title") }</span>
 
         <div id="confirmationQuestion" class="container">
-            <h3>${ ui.message("coreapps.simpleFormUi.confirm.question") }</h3>
+            <h3>${ ui.message("htmlformentryui.simpleFormUi.confirm.question") }</h3>
 
             <div id="confirmation-messages"></div>
 
@@ -95,15 +106,15 @@ ${ ui.includeFragment("htmlformentryui", "htmlform/enterHtmlForm", [
 
             <p style="display: inline">
                 <button type="submit" onclick="submitHtmlForm()" class="submitButton confirm right">
-                    ${ ui.message("coreapps.save") }
+                    ${ ui.message("htmlformentryui.save") }
                     <i class="icon-spinner icon-spin icon-2x" style="display: none; margin-left: 10px;"></i>
                 </button>
             </p>
             <p style="display: inline">
-                <input type="button" value="${ ui.message("coreapps.no") }" class="cancel" />
+                <input type="button" value="${ ui.message("htmlformentryui.no") }" class="cancel" />
             </p>
             <p>
-                <span class="error field-error">${ ui.message("coreapps.simpleFormUi.error.emptyForm") }</span>
+                <span class="error field-error">${ ui.message("htmlformentryui.simpleFormUi.error.emptyForm") }</span>
             </p>
         </div>
     </div>
