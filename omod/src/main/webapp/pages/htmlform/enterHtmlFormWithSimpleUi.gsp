@@ -19,6 +19,7 @@
     ui.includeJavascript("uicommons", "angular.min.js");
     ui.includeJavascript("uicommons", "angular-resource.min.js");
     ui.includeJavascript("htmlformentryui", "htmlFormSimple.js", Integer.MIN_VALUE)
+    ui.includeCss("kenyaemr", "referenceapplication.css")
     ui.includeCss("htmlformentryui", "htmlform/htmlFormSimple.css")
     def createNewVisit = createVisit ?: false
 
