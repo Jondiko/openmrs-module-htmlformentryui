@@ -3,7 +3,7 @@
 
     ui.includeJavascript("uicommons", "angular.min.js");
     ui.includeJavascript("uicommons", "angular-resource.min.js");
-    ui.includeCss("kenyaemr", "referenceapplication.css", 100)
+    ui.includeCss("kenyaemr", "referenceapplication.css")
 
     def breadcrumbMiddle = breadcrumbOverride ?: """
         [ { label: '${ returnLabel }' , link: '${ returnUrl }'} ]

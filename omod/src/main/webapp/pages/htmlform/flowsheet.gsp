@@ -6,6 +6,10 @@
     ui.includeJavascript("htmlformentryui", "jstat.min.js")
     ui.includeJavascript("htmlformentryui", "htmlForm.js")
     ui.includeCss("htmlformentryui", "htmlform/referenceappmini.css")
+    ui.includeCss("kenyaemrorderentry", "font-awesome.css")
+    ui.includeCss("kenyaemrorderentry", "font-awesome.min.css")
+    ui.includeCss("kenyaemrorderentry", "font-awesome.css.map")
+    ui.includeCss("kenyaemrorderentry", "fontawesome-webfont.svg")
 
     def addNewRow = (addRow != null && addRow == true) ? true : false;
 %>
@@ -30,7 +34,7 @@
             flowsheet.setPatientDashboardUrl('/'+OPENMRS_CONTEXT_PATH + '/' + dashboardUrl);
         <% } %>
     <% } else { %>
-        flowsheet.setPatientDashboardUrl('/'+OPENMRS_CONTEXT_PATH+'/kenyaemr/clinician/clinicianViewPatient.page?patientId='+patientUuidStr)
+        flowsheet.setPatientDashboardUrl('/'+OPENMRS_CONTEXT_PATH+'/kenyaemr/clinicianFacing/patientProfile.page?patientId='+patientIdStr)
     <% } %>
 
     var flowsheetIndex = 0;
@@ -216,7 +220,7 @@
     }
 </style>
 
-<div id="flowsheet-app">
+<div id="flowsheet-app" style="margin-left: 6px;">
 
     <% if (!alerts.empty) { %>
         <div id="alert-section" class="hide-when-printing">
@@ -232,25 +236,25 @@
 
     <div id="form-actions" class="hide-when-printing">
         <a class="form-action-link" id="back-link" onclick="flowsheet.backToPatientDashboard();">
-            <i class="icon-chevron-left"></i>
+            <i class="fa fa-chevron-left" style="font-size:16px;color:steelblue"></i>
             Back to Dashboard
         </a>
         <% if (headerForm != 'blank_header') { %>
             <a class="form-action-link" id="edit-header-link" onclick="flowsheet.enterHeader();">
-                <i class="icon-pencil"></i>
+            <i class="fa fa-pencil" style="font-size:16px;color:steelblue"></i>
                 Edit Header
             </a>
         <% } %>
         <a class="form-action-link" id="print-form-link" onclick="flowsheet.printForm();">
-            <i class="icon-print"></i>
+        <i class="fa fa-print" style="font-size:16px;color:steelblue"></i>
             ${ ui.message("uicommons.print") }
         </a>
         <a class="form-action-link" id="cancel-button" onclick="flowsheet.cancelEdit();">
-            <i class="icon-circle-arrow-left"></i>
+            <i class="fa fa-close" style="font-size:16px;color:red"></i>
             ${ ui.message("uicommons.cancel") }
         </a>
         <a class="form-action-link" id="delete-button" onclick="flowsheet.deleteCurrentEncounter();">
-            <i class="icon-remove"></i>
+            <i class="fa fa-trash-o" style="font-size:16px;color:red"></i>
             ${ ui.message("uicommons.delete") }
         </a>
     </div>
@@ -264,12 +268,12 @@
     <%  int i=0;
         for (String formName : flowsheetEncounters.keySet()) { %>
 
-        <div class="visit-section">
+        <div class="visit-section" style="margin-left: 7px">
 
             <% if (!viewOnly && formName != 'blank' && addNewRow == true) { %>
                 <div class="add-another-flowsheet-section flowsheet-section">
                     <a class="form-action-link" onclick="flowsheet.enterVisit('${formName}');">
-                        <i class="icon-pencil"></i>
+                        <i class="fa fa-pencil" style="font-size:16px;color:#7a311e"></i>
                         Enter New ${flowsheetForms.get(formName).name}
                     </a>
                 </div>
