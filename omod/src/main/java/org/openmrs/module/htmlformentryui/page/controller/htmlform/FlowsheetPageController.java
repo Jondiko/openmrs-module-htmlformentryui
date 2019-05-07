@@ -161,6 +161,7 @@ public class FlowsheetPageController {
     protected List<Encounter> getEncountersForForm(Patient p, HtmlForm form, String requireObs) {
         EncountersForPatientDataDefinition edd = new EncountersForPatientDataDefinition();
         edd.addType(form.getForm().getEncounterType());
+
         List<Encounter> ret = DataUtil.evaluateForPatient(edd, p.getPatientId(), List.class);
         if (ret == null) {
             ret = new ArrayList<Encounter>();
