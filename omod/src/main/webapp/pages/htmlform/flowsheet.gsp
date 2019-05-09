@@ -7,10 +7,7 @@
     ui.includeJavascript("htmlformentryui", "htmlForm.js")
     ui.includeCss("htmlformentryui", "htmlform/referenceappmini.css")
     ui.includeCss("kenyaemr", "referenceapplication.css")
-    ui.includeCss("kenyaemrorderentry", "font-awesome.css")
-    ui.includeCss("kenyaemrorderentry", "font-awesome.min.css")
-    ui.includeCss("kenyaemrorderentry", "font-awesome.css.map")
-    ui.includeCss("kenyaemrorderentry", "fontawesome-webfont.svg")
+
 
     def addNewRow = (addRow != null && addRow == true) ? true : false;
 %>
