@@ -15,9 +15,12 @@ package org.openmrs.module.htmlformentryui.page.controller.htmlform;
 
 import org.openmrs.Concept;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterType;
+import org.openmrs.Form;
 import org.openmrs.Location;
 import org.openmrs.Obs;
 import org.openmrs.Patient;
+import org.openmrs.api.EncounterService;
 import org.openmrs.api.FormService;
 import org.openmrs.api.LocationService;
 import org.openmrs.api.context.Context;
@@ -26,7 +29,6 @@ import org.openmrs.module.htmlformentry.HtmlForm;
 import org.openmrs.module.htmlformentry.HtmlFormEntryService;
 import org.openmrs.module.htmlformentryui.HtmlFormUtil;
 import org.openmrs.module.reporting.common.ObjectUtil;
-import org.openmrs.module.reporting.data.DataUtil;
 import org.openmrs.module.reporting.data.patient.definition.EncountersForPatientDataDefinition;
 import org.openmrs.ui.framework.SimpleObject;
 import org.openmrs.ui.framework.UiUtils;
@@ -39,6 +41,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -54,6 +58,7 @@ public class FlowsheetPageController {
 	public void controller(@RequestParam(value="patientId", required=false) Patient patient,
                            @RequestParam(value="headerForm") String headerForm,
                            @RequestParam(value="flowsheets") String[] flowsheets,
+                           @RequestParam(value="flowsheetsEncounterLimit", required = false) String flowsheetsEncounterLimit,
                            @RequestParam(value="viewOnly", required = false) Boolean viewOnly,
                            @RequestParam(value="addRow", required = false) Boolean addRow,
                            @RequestParam(value="requireEncounter", required = false) Boolean requireEncounter,
@@ -87,7 +92,7 @@ public class FlowsheetPageController {
         model.addAttribute("headerHtmlForm", headerHtmlForm);
 
         Encounter headerEncounter = null;
-        List<Encounter> headerEncounters = getEncountersForForm(patient, headerHtmlForm, null);
+        List<Encounter> headerEncounters = getEncountersForForm(patient, headerHtmlForm, null, 0);
         if (headerEncounters.size() > 0) {
             headerEncounter = headerEncounters.get(headerEncounters.size() - 1); // Most recent
             if (headerEncounters.size() > 1) {
@@ -99,17 +104,30 @@ public class FlowsheetPageController {
 
         Map<String, HtmlForm> flowsheetForms = new LinkedHashMap<String, HtmlForm>();
         Map<String, List<Integer>> flowsheetEncounters = new LinkedHashMap<String, List<Integer>>();
+
         if (flowsheets != null) {
+            List<String> flowsheetEncLimits = new ArrayList<String>();
+            if (flowsheetsEncounterLimit != null && !flowsheetsEncounterLimit.equals("")) {
+                flowsheetEncLimits = Arrays.asList(flowsheetsEncounterLimit.split(","));
+            }
+            int counter = 0;
             for (String flowsheet : flowsheets) {
                 HtmlForm htmlForm = getHtmlFormFromResource(flowsheet, resourceFactory, formService, htmlFormEntryService);
                 flowsheetForms.put(flowsheet, htmlForm);
                 List<Integer> encIds = new ArrayList<Integer>();
-                List<Encounter> encounters = getEncountersForForm(patient, htmlForm, requireObs);
+                int limitForCurrentFlowsheet = 0;
+                if (flowsheetEncLimits != null && flowsheetEncLimits.size() > 0) {
+                    String conf = flowsheetEncLimits.get(counter) != null ? flowsheetEncLimits.get(counter) : "0";
+                    limitForCurrentFlowsheet = Integer.valueOf(conf).intValue();
+                }
+
+                List<Encounter> encounters = getEncountersForForm(patient, htmlForm, requireObs, limitForCurrentFlowsheet);
                 for (Encounter e : encounters) {
                     encIds.add(e.getEncounterId());
                     allEncounters.add(e);
                 }
                 flowsheetEncounters.put(flowsheet, encIds);
+                counter++;
             }
         }
         model.addAttribute("flowsheetForms", flowsheetForms);
@@ -158,11 +176,13 @@ public class FlowsheetPageController {
     /**
      * @return all encounters for the given patient that have the same encounter type as the given form
      */
-    protected List<Encounter> getEncountersForForm(Patient p, HtmlForm form, String requireObs) {
+    protected List<Encounter> getEncountersForForm(Patient p, HtmlForm form, String requireObs, int lastN) {
         EncountersForPatientDataDefinition edd = new EncountersForPatientDataDefinition();
         edd.addType(form.getForm().getEncounterType());
 
-        List<Encounter> ret = DataUtil.evaluateForPatient(edd, p.getPatientId(), List.class);
+        //List<Encounter> ret = DataUtil.evaluateForPatient(edd, p.getPatientId(), List.class);
+        List<Encounter> ret = getAllEncounters(p, form.getForm().getEncounterType(), form.getForm());
+
         if (ret == null) {
             ret = new ArrayList<Encounter>();
         }
@@ -176,7 +196,13 @@ public class FlowsheetPageController {
             }
 
         }
-        return ret;
+        // add code to return the last N encounters
+
+        if (lastN > 0) {
+            return getMostRecentNEncounters(ret, lastN);
+        } else {
+            return ret;
+        }
     }
 
     protected boolean hasQuestionsAnswered(Encounter e, Set<String> questionsNeeded) {
@@ -206,5 +232,24 @@ public class FlowsheetPageController {
             throw new IllegalArgumentException("No concept with uuid found " + uuid);
         }
         return c;
+    }
+
+    protected List<Encounter> getAllEncounters(Patient patient, EncounterType type, Form form) {
+        List<Encounter> encounters = Context.getEncounterService().getEncounters(patient, null, null, null, Collections.singleton(form), Collections.singleton(type), null, null, null, false);
+        return encounters;
+    }
+
+    protected List<Encounter> getMostRecentNEncounters(List<Encounter> encounters, int mostRecentN) {
+        Collections.reverse(encounters);
+        List<Encounter> result = new ArrayList<Encounter>();
+        int counter = 0;
+        for (Encounter e : encounters) {
+            counter++;
+            if (counter > mostRecentN) {
+                break;
+            }
+            result.add(e);
+        }
+        return result;
     }
 }
