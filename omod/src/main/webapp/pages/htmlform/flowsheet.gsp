@@ -213,7 +213,7 @@ table .visit-table-body td {
 }
 
 .add-another-flowsheet-section {
-    padding: 10px;
+    padding: 0px;
 }
 
 .data-entry-table {
@@ -306,12 +306,12 @@ body {
     <div class="visit-section" style="margin-left: 7px">
 
         <% if (!viewOnly && formName != 'blank' && addNewRow == true) { %>
-        <fieldset >
+        <fieldset id="fieldset_index_${i}">
             <legend>${flowsheetForms.get(formName).name}</legend>
 
             <div class="add-another-flowsheet-section flowsheet-section">
                 <a class="form-action-link" onclick="flowsheet.enterVisit('${formName}');">
-                    <i class="fa fa-files-o primary" style="font-size:16px;color:#7a311e"></i>
+                    <i class="fa fa-file-text" style="color:steelblue"></i>
                     Enter New ${flowsheetForms.get(formName).name}
                 </a>
             </div>

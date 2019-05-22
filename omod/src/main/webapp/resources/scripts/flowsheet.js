@@ -197,6 +197,7 @@
     }
 
     flowsheet.toggleViewFlowsheet = function() {
+        jq('fieldset').show();
         jq('#header-section').show();
         jq(".form-action-link").show();
         if (viewOnly || !requireEncounter) {
@@ -274,6 +275,7 @@
         flowsheet.setCurrentlyEditingFormName(formName);
         loadHtmlFormForEncounter(formName, null, true, function(data) {
             var fs = flowsheet.getFlowsheet(formName);
+            jq("fieldset").not('#fieldset_index_'+fs.index).hide();
             jq('#flowsheet-edit-section-'+fs.index).html(data).show();
             setupFormCustomizations(jq('#flowsheet-edit-section-'+formName));
             showLinksForEditMode();
@@ -288,6 +290,7 @@
         flowsheet.setCurrentlyEditingEncounterId(encId);
         loadHtmlFormForEncounter(formName, encId, true, function(data) {
             var fs = flowsheet.getFlowsheet(formName);
+            jq("fieldset").not('#fieldset_index_'+fs.index).hide();
             jq('#flowsheet-edit-section-'+fs.index).html(data).show();
             setupFormCustomizations(jq('#flowsheet-edit-section-'+fs.index));
             showLinksForEditMode();
